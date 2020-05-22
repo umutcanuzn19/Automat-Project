@@ -1,0 +1,549 @@
+<html>
+<head>
+<title>Nearest_Neighbour.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+.s4 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Nearest_Neighbour.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">javax.swing.*</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.awt.*</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.io.*</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.ArrayList</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.Random</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.Scanner</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.Stack</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">Nearest_Neighbour </span><span class="s0">extends </span><span class="s1">Canvas {</span>
+	
+	<span class="s0">public static int </span><span class="s1">x_Coordinates = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static int </span><span class="s1">y_Coordinates = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; X_Coordinates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;</span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; Y_Coordinates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;</span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; xL_Coordinates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;</span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; xR_Coordinates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;</span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; yL_Coordinates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;</span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; yR_Coordinates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;</span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; xRemaningCoordinates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;</span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; yRemaningCoordinates = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;</span>
+	<span class="s0">public static float </span><span class="s1">minDist = </span><span class="s2">0 </span><span class="s0">;</span>
+	<span class="s0">public static float </span><span class="s1">ShortestDistance = </span><span class="s2">1000000000</span><span class="s0">;</span>
+	<span class="s0">public static float </span><span class="s1">CurrentDistance = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static int </span><span class="s1">CurrentIndex = </span><span class="s2">0</span><span class="s0">;</span>
+	<span class="s0">public static float </span><span class="s1">NextCity_X = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static float </span><span class="s1">NextCity_Y = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; NextCityX = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;  </span><span class="s3">//Store the X locations of the next city </span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; NextCityY = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;  </span><span class="s3">//Store the Y locations of the next city</span>
+	<span class="s0">public static float </span><span class="s1">R1 </span><span class="s0">, </span><span class="s1">R2 </span><span class="s0">,</span><span class="s1">R3 = </span><span class="s2">0</span><span class="s0">;</span>
+	<span class="s0">public static </span><span class="s1">ArrayList&lt;Float&gt; ShortestDistances = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Float&gt;()</span><span class="s0">;  </span><span class="s3">//Stores the calculated shortest distances in the array </span>
+	<span class="s0">public static </span><span class="s1">Stack&lt;Float&gt; CurrentShortestDistances = </span><span class="s0">new </span><span class="s1">Stack&lt;Float&gt;()</span><span class="s0">; </span>
+	<span class="s0">public static </span><span class="s1">Stack&lt;Float&gt; CurrentShortestCoordinateX = </span><span class="s0">new </span><span class="s1">Stack&lt;Float&gt;()</span><span class="s0">; </span>
+	<span class="s0">public static </span><span class="s1">Stack&lt;Float&gt; CurrentShortestCoordinateY = </span><span class="s0">new </span><span class="s1">Stack&lt;Float&gt;()</span><span class="s0">; </span>
+	<span class="s0">public static </span><span class="s1">Random RandomCity = </span><span class="s0">new </span><span class="s1">Random()</span><span class="s0">;</span>
+	<span class="s0">public static float </span><span class="s1">FirstCityX = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static float </span><span class="s1">FirstCityY = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static float </span><span class="s1">LastCityX = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static float </span><span class="s1">LastCityY = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static float </span><span class="s1">LastDistance = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static float </span><span class="s1">TotalDistance1 = </span><span class="s2">0</span><span class="s0">;</span>
+	<span class="s0">public static float </span><span class="s1">TotalDistance2 = </span><span class="s2">0</span><span class="s0">;</span>
+	<span class="s0">public static float </span><span class="s1">LastTotalDistance = </span><span class="s2">0 </span><span class="s0">;</span>
+	<span class="s0">public static float </span><span class="s1">LastElementX = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static float </span><span class="s1">LastElementY = </span><span class="s2">0</span><span class="s0">; </span>
+	<span class="s0">public static boolean </span><span class="s1">LastElementsRemoved = </span><span class="s0">false;</span>
+
+	
+	<span class="s3">//float CurrentDistance = (float) Math.sqrt(Math.abs((X_Coordinates.get(j) - X_Coordinates.get(i)) * (X_Coordinates.get(j) - X_Coordinates.get(i))) + Math.abs((Y_Coordinates.get(j) - Y_Coordinates.get(i)) * (Y_Coordinates.get(j) - Y_Coordinates.get(i))));</span>
+
+	
+	<span class="s0">public static void </span><span class="s1">main(String[] args) </span><span class="s0">throws </span><span class="s1">FileNotFoundException  {</span>
+		<span class="s3">// TODO Auto-generated method stub</span>
+		
+		
+		<span class="s0">float</span><span class="s1">[] XYCoordinates = readFile(</span><span class="s4">&quot;C:</span><span class="s0">\\</span><span class="s4">Users</span><span class="s0">\\</span><span class="s4">tasso</span><span class="s0">\\</span><span class="s4">OneDrive</span><span class="s0">\\</span><span class="s4">Masaüstü</span><span class="s0">\\</span><span class="s4">YeniDönem</span><span class="s0">\\</span><span class="s4">Otomat Teoremi</span><span class="s0">\\</span><span class="s4">proje</span><span class="s0">\\</span><span class="s4">att48_xy.txt&quot;</span><span class="s1">)</span><span class="s0">;</span>
+
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; XYCoordinates.length</span><span class="s0">; </span><span class="s1">i = i + </span><span class="s2">2</span><span class="s1">)</span>
+		<span class="s1">{</span>
+			<span class="s3">//Use this loop to store X Coordinates</span>
+			<span class="s1">X_Coordinates.add(XYCoordinates[i])</span><span class="s0">;</span>
+		<span class="s1">}</span>
+
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s2">1</span><span class="s0">; </span><span class="s1">j &lt; XYCoordinates.length</span><span class="s0">; </span><span class="s1">j = j + </span><span class="s2">2</span><span class="s1">)</span>
+		<span class="s1">{</span>
+			<span class="s3">//Use this loop to store Y Coordinates</span>
+			<span class="s1">Y_Coordinates.add(XYCoordinates[j])</span><span class="s0">;</span>
+		<span class="s1">}</span>
+
+		
+		 <span class="s1">Nearest_Neighbour_Window()</span><span class="s0">;</span>
+		
+		
+		<span class="s1">divide_Conquer_Nearest_Neighbour_Algorithm()</span><span class="s0">;</span>
+
+
+
+	<span class="s1">}</span>
+	
+
+	<span class="s0">public static float</span><span class="s1">[] readFile(String file) </span><span class="s0">throws </span><span class="s1">FileNotFoundException</span>
+	<span class="s1">{</span>
+		<span class="s1">File Coordinate_File = </span><span class="s0">new </span><span class="s1">File(</span><span class="s4">&quot;C:</span><span class="s0">\\</span><span class="s4">Users</span><span class="s0">\\</span><span class="s4">tasso</span><span class="s0">\\</span><span class="s4">OneDrive</span><span class="s0">\\</span><span class="s4">Masaüstü</span><span class="s0">\\</span><span class="s4">YeniDönem</span><span class="s0">\\</span><span class="s4">Otomat Teoremi</span><span class="s0">\\</span><span class="s4">proje</span><span class="s0">\\</span><span class="s4">att48_xy.txt&quot;</span><span class="s1">)</span><span class="s0">;</span>
+		<span class="s1">Scanner ScanFile = </span><span class="s0">new </span><span class="s1">Scanner(Coordinate_File)</span><span class="s0">;</span>
+		<span class="s0">int </span><span class="s1">ctr = </span><span class="s2">0</span><span class="s0">; </span>
+		<span class="s0">while</span><span class="s1">(ScanFile.hasNextInt())</span>
+		<span class="s1">{</span>
+			<span class="s1">ctr++</span><span class="s0">; </span>
+			<span class="s1">ScanFile.nextInt()</span><span class="s0">; </span>
+		<span class="s1">}</span>
+		<span class="s0">float</span><span class="s1">[] Coordinates = </span><span class="s0">new float </span><span class="s1">[ctr]</span><span class="s0">; </span>
+		
+		<span class="s1">Scanner Get_Numbers = </span><span class="s0">new </span><span class="s1">Scanner(Coordinate_File)</span><span class="s0">; </span>
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; Coordinates.length</span><span class="s0">; </span><span class="s1">i++)</span>
+		<span class="s1">{</span>
+			<span class="s1">Coordinates[i] = Get_Numbers.nextFloat()</span><span class="s0">; </span>
+		<span class="s1">}</span>
+		
+		<span class="s0">return </span><span class="s1">Coordinates</span><span class="s0">;</span>
+		
+	<span class="s1">}</span>
+	
+	
+	
+	
+	<span class="s0">public static void </span><span class="s1">Nearest_Neighbour_Window()</span>
+	<span class="s1">{</span>
+		
+		 <span class="s1">JFrame Main_Window = </span><span class="s0">new </span><span class="s1">JFrame(</span><span class="s4">&quot;Nearest_Neighbour&quot;</span><span class="s1">)</span><span class="s0">;</span>
+		 <span class="s1">Canvas canvas = </span><span class="s0">new </span><span class="s1">Nearest_Neighbour()</span><span class="s0">;</span>
+	     <span class="s1">canvas.setSize(</span><span class="s2">800</span><span class="s0">, </span><span class="s2">500</span><span class="s1">)</span><span class="s0">;</span>
+	     <span class="s1">canvas.setBackground(Color.white)</span><span class="s0">;</span>
+	     <span class="s1">Main_Window.add(canvas)</span><span class="s0">;</span>
+	     <span class="s1">Main_Window.pack()</span><span class="s0">;</span>
+	     <span class="s1">Main_Window.setVisible(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+			
+		
+	<span class="s1">}</span>
+	
+	<span class="s0">public void </span><span class="s1">paint(Graphics g)</span>
+    <span class="s1">{</span>
+        <span class="s1">g.setColor(Color.blue)</span><span class="s0">;</span>
+        <span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; X_Coordinates.size()</span><span class="s0">; </span><span class="s1">i++){  </span><span class="s3">//This looks at all the x and y coordinates at the same time in both arraylists</span>
+            <span class="s1">g.fillOval((Math.round(X_Coordinates.get(i)) % </span><span class="s2">800</span><span class="s1">)</span><span class="s0">,</span><span class="s1">(Math.round(Y_Coordinates.get(i)) % </span><span class="s2">500</span><span class="s1">)</span><span class="s0">, </span><span class="s2">10</span><span class="s0">, </span><span class="s2">10</span><span class="s1">)</span><span class="s0">;</span>
+            
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+	
+	<span class="s0">public static void </span><span class="s1">divide_Conquer_Nearest_Neighbour_Algorithm()</span>
+	<span class="s1">{</span>
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i= </span><span class="s2">0 </span><span class="s0">; </span><span class="s1">i&lt; X_Coordinates.size()/</span><span class="s2">2</span><span class="s0">;</span><span class="s1">i++){</span>
+			<span class="s1">xL_Coordinates.add(X_Coordinates.get(i))</span><span class="s0">;</span>
+		<span class="s1">}</span>
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i= X_Coordinates.size()/</span><span class="s2">2 </span><span class="s0">; </span><span class="s1">i &lt; X_Coordinates.size() - </span><span class="s2">1</span><span class="s0">;</span><span class="s1">i++){</span>
+			<span class="s1">xR_Coordinates.add(X_Coordinates.get(i))</span><span class="s0">;</span>
+		<span class="s1">}</span>
+
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i= </span><span class="s2">0 </span><span class="s0">; </span><span class="s1">i&lt; Y_Coordinates.size()/</span><span class="s2">2</span><span class="s0">;</span><span class="s1">i++){</span>
+			<span class="s1">yL_Coordinates.add(Y_Coordinates.get(i))</span><span class="s0">;</span>
+		<span class="s1">}</span>
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i= Y_Coordinates.size()/</span><span class="s2">2 </span><span class="s0">; </span><span class="s1">i &lt; Y_Coordinates.size() - </span><span class="s2">1</span><span class="s0">;</span><span class="s1">i++){</span>
+			<span class="s1">yR_Coordinates.add(Y_Coordinates.get(i))</span><span class="s0">;</span>
+		<span class="s1">}</span>
+
+
+
+
+		<span class="s0">int </span><span class="s1">RandomIndex = RandomCity.nextInt(xL_Coordinates.size())</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Random Index = &quot; </span><span class="s1">+ RandomIndex)</span><span class="s0">;</span>
+		
+		<span class="s1">System.out.println(</span><span class="s4">&quot;The first random city is : &quot; </span><span class="s1">+ xL_Coordinates.get(RandomIndex) + </span><span class="s4">&quot;, &quot; </span><span class="s1">+ yL_Coordinates.get(RandomIndex))</span><span class="s0">;</span>
+		
+		<span class="s0">if</span><span class="s1">(NextCityX.isEmpty())</span>
+		<span class="s1">{</span>
+			<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; xL_Coordinates.size()</span><span class="s0">; </span><span class="s1">i++) </span><span class="s3">//Calculate the shortest distance for the first city</span>
+			<span class="s1">{</span>
+				<span class="s0">float </span><span class="s1">CurrentDistance = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((xL_Coordinates.get(RandomIndex) - xL_Coordinates.get(i)) * (xL_Coordinates.get(RandomIndex) - xL_Coordinates.get(i))) + Math.abs((yL_Coordinates.get(RandomIndex) - yL_Coordinates.get(i)) * (yL_Coordinates.get(RandomIndex) - yL_Coordinates.get(i))))</span><span class="s0">;</span>
+				
+				<span class="s0">if</span><span class="s1">(CurrentDistance == </span><span class="s2">0</span><span class="s1">)</span>
+				<span class="s1">{</span>
+					<span class="s1">FirstCityX = xL_Coordinates.get(i)</span><span class="s0">;</span>
+					<span class="s1">FirstCityY = yL_Coordinates.get(i)</span><span class="s0">;</span>
+					
+					<span class="s1">xL_Coordinates.remove(i)</span><span class="s0">; </span><span class="s3">//Remove the coordinates from the array after storing it in another variable</span>
+					<span class="s1">yL_Coordinates.remove(i)</span><span class="s0">;</span>
+					
+				<span class="s1">}</span>
+				<span class="s0">else</span>
+				<span class="s1">{</span>
+					<span class="s0">if</span><span class="s1">(CurrentDistance &lt;= ShortestDistance &amp;&amp; LastElementsRemoved == </span><span class="s0">false</span><span class="s1">)</span>
+					<span class="s1">{</span>
+						<span class="s1">ShortestDistance = CurrentDistance</span><span class="s0">; </span>
+						
+						<span class="s1">System.out.println(</span><span class="s4">&quot;Shortest Distance so far : &quot; </span><span class="s1">+ ShortestDistance + </span><span class="s4">&quot;, at &quot; </span><span class="s1">+ xL_Coordinates.get(i) + </span><span class="s4">&quot;, &quot; </span><span class="s1">+ yL_Coordinates.get(i))</span><span class="s0">;</span>
+						
+						<span class="s1">CurrentShortestDistances.push(ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateX.push(xL_Coordinates.get(i))</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateY.push(yL_Coordinates.get(i))</span><span class="s0">;</span>
+					<span class="s1">}</span>
+				<span class="s1">}</span>
+				
+				
+				
+				<span class="s0">if</span><span class="s1">(i == xL_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+				<span class="s1">{</span>
+					<span class="s1">ShortestDistances.add(CurrentShortestDistances.peek())</span><span class="s0">;</span>
+					<span class="s1">NextCityX.add(CurrentShortestCoordinateX.peek())</span><span class="s0">;</span>
+					<span class="s1">NextCityY.add(CurrentShortestCoordinateY.peek())</span><span class="s0">;</span>
+					
+					<span class="s1">CurrentShortestDistances.clear()</span><span class="s0">; </span>
+					<span class="s1">CurrentShortestCoordinateX.clear()</span><span class="s0">;</span>
+					<span class="s1">CurrentShortestCoordinateY.clear()</span><span class="s0">;</span>
+					
+					<span class="s1">ShortestDistance = </span><span class="s2">1000000000</span><span class="s0">;</span>
+				<span class="s1">}</span>
+			<span class="s1">}</span>
+		<span class="s1">}</span>
+		
+		
+		
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; NextCityX.size()</span><span class="s0">; </span><span class="s1">i++)</span>
+		<span class="s1">{</span>
+			<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">j &lt; xL_Coordinates.size()</span><span class="s0">; </span><span class="s1">j++)</span>
+			<span class="s1">{</span>
+				<span class="s0">float </span><span class="s1">CurrentDistance = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((NextCityX.get(i) - xL_Coordinates.get(j)) * (NextCityX.get(i) - xL_Coordinates.get(j))) + Math.abs((NextCityY.get(i) - yL_Coordinates.get(j)) * (NextCityY.get(i) - yL_Coordinates.get(j))))</span><span class="s0">;</span>
+				
+				
+				<span class="s1">System.out.println( NextCityX.get(i) + </span><span class="s4">&quot;, &quot; </span><span class="s1">+ NextCityY.get(i) + </span><span class="s4">&quot;   &quot; </span><span class="s1">+ xL_Coordinates.get(j) + </span><span class="s4">&quot;, &quot; </span><span class="s1">+ yL_Coordinates.get(j) + </span><span class="s4">&quot;     &quot; </span><span class="s1">+ CurrentDistance)</span><span class="s0">;</span>
+				
+				<span class="s0">if</span><span class="s1">(CurrentDistance == </span><span class="s2">0 </span><span class="s1">&amp;&amp; j &lt; X_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+				<span class="s1">{</span>
+					
+					<span class="s1">xL_Coordinates.remove(j)</span><span class="s0">;</span>
+					<span class="s1">yL_Coordinates.remove(j)</span><span class="s0">;</span>
+				<span class="s1">}</span>
+				
+				<span class="s0">else if</span><span class="s1">(CurrentDistance == </span><span class="s2">0 </span><span class="s1">&amp;&amp; j == xL_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+				<span class="s1">{</span>
+					
+					<span class="s1">LastElementsRemoved = </span><span class="s0">true; </span>
+					
+				<span class="s1">}</span>
+				
+				<span class="s0">if</span><span class="s1">(LastElementsRemoved == </span><span class="s0">false</span><span class="s1">)</span>
+				<span class="s1">{</span>
+					<span class="s0">if</span><span class="s1">(CurrentDistance &lt;= ShortestDistance &amp;&amp; CurrentDistance != </span><span class="s2">0 </span><span class="s1">&amp;&amp; CurrentDistance != ShortestDistances.get(ShortestDistances.size() - </span><span class="s2">1</span><span class="s1">))</span>
+					<span class="s1">{</span>
+						
+						<span class="s1">ShortestDistance = CurrentDistance</span><span class="s0">; </span>
+						<span class="s1">System.out.println(</span><span class="s4">&quot;Smallest Distance : &quot; </span><span class="s1">+ ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestDistances.push(ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateX.push(xL_Coordinates.get(j))</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateY.push(yL_Coordinates.get(j))</span><span class="s0">;</span>
+					<span class="s1">}</span>
+					
+					<span class="s0">if</span><span class="s1">(j == xL_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+					<span class="s1">{</span>
+						
+						<span class="s1">ShortestDistances.add(CurrentShortestDistances.peek())</span><span class="s0">;</span>
+						<span class="s1">NextCityX.add(CurrentShortestCoordinateX.peek())</span><span class="s0">;</span>
+						<span class="s1">NextCityY.add(CurrentShortestCoordinateY.peek())</span><span class="s0">;</span>
+						
+						<span class="s1">ShortestDistance = </span><span class="s2">1000000000</span><span class="s0">;</span>
+						
+					<span class="s1">}</span>
+				<span class="s1">}</span>
+				<span class="s0">else</span>
+				<span class="s1">{</span>
+					<span class="s0">if</span><span class="s1">(CurrentDistance &lt;= ShortestDistance &amp;&amp; CurrentDistance != </span><span class="s2">0 </span><span class="s1">&amp;&amp; CurrentDistance != ShortestDistances.get(ShortestDistances.size() - </span><span class="s2">1</span><span class="s1">) &amp;&amp; j != xL_Coordinates.get(xL_Coordinates.size() - </span><span class="s2">1</span><span class="s1">))</span>
+					<span class="s1">{</span>
+						<span class="s1">ShortestDistance = CurrentDistance</span><span class="s0">; </span>
+						<span class="s1">System.out.println(</span><span class="s4">&quot;Smallest Distance : &quot; </span><span class="s1">+ ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestDistances.push(ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateX.push(xL_Coordinates.get(j))</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateY.push(yL_Coordinates.get(j))</span><span class="s0">;</span>
+					<span class="s1">}</span>
+					<span class="s0">if</span><span class="s1">(j == xL_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+					<span class="s1">{</span>
+						
+						<span class="s1">ShortestDistances.add(CurrentShortestDistances.peek())</span><span class="s0">;</span>
+						<span class="s1">NextCityX.add(CurrentShortestCoordinateX.peek())</span><span class="s0">;</span>
+						<span class="s1">NextCityY.add(CurrentShortestCoordinateY.peek())</span><span class="s0">;</span>
+						
+						<span class="s1">ShortestDistance = </span><span class="s2">1000000000</span><span class="s0">;</span>
+					<span class="s1">}</span>
+				<span class="s1">}</span>
+					
+				
+			<span class="s1">}</span>
+			
+			<span class="s0">if</span><span class="s1">(xL_Coordinates.size() == </span><span class="s2">2 </span><span class="s1">&amp;&amp; yL_Coordinates.size() == </span><span class="s2">2</span><span class="s1">)</span>
+			<span class="s1">{</span>
+				<span class="s1">LastCityX = xL_Coordinates.get(</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+				<span class="s1">LastCityY = yL_Coordinates.get(</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+				
+				<span class="s1">LastDistance = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((LastCityX - FirstCityX) * (LastCityX - FirstCityX)) + Math.abs((LastCityY - FirstCityY) * (LastCityY - FirstCityY)))</span><span class="s0">;</span>
+				
+				
+				
+				<span class="s0">break;</span>
+			<span class="s1">}</span>
+				
+		<span class="s1">}</span>
+		<span class="s1">TotalDistance1 = TotalDistanceCalculator() + LastDistance</span><span class="s0">;</span>
+
+
+		<span class="s1">System.out.println(</span><span class="s4">&quot;&quot;</span><span class="s1">)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;_______________RESULTS______________&quot;</span><span class="s1">)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Remaining X and Y Coordinates = &quot; </span><span class="s1">+ xL_Coordinates.size())</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Shortest distances : &quot; </span><span class="s1">+ ShortestDistances)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Remaining X Coordinates : &quot; </span><span class="s1">+ xL_Coordinates)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Remaining Y Coordinates : &quot; </span><span class="s1">+ yL_Coordinates)</span><span class="s0">;</span>
+
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Next City X : &quot; </span><span class="s1">+ NextCityX)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Next City Y : &quot; </span><span class="s1">+ NextCityY)</span><span class="s0">;</span>
+
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Final Distance : &quot; </span><span class="s1">+ LastDistance)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Total Distance : &quot; </span><span class="s1">+ TotalDistance1)</span><span class="s0">;</span>
+
+<span class="s3">///////////////////////</span>
+
+
+		<span class="s1">NextCityX.clear()</span><span class="s0">;</span>
+		<span class="s1">NextCityY.clear()</span><span class="s0">;</span>
+		<span class="s1">ShortestDistances.clear()</span><span class="s0">;</span>
+
+		<span class="s1">CurrentShortestDistances.empty()</span><span class="s0">;</span>
+		<span class="s1">CurrentShortestCoordinateX.empty()</span><span class="s0">;</span>
+		<span class="s1">CurrentShortestCoordinateY.empty()</span><span class="s0">;</span>
+
+		<span class="s1">CurrentDistance = </span><span class="s2">0 </span><span class="s0">;</span>
+		<span class="s1">ShortestDistance = </span><span class="s2">1000000000</span><span class="s0">;</span>
+
+		<span class="s1">CurrentIndex = </span><span class="s2">0</span><span class="s0">;</span>
+		<span class="s1">NextCity_X = </span><span class="s2">0</span><span class="s0">;</span>
+
+		<span class="s1">NextCity_Y = </span><span class="s2">0</span><span class="s0">;</span>
+
+		<span class="s1">x_Coordinates = </span><span class="s2">0 </span><span class="s0">;</span>
+		<span class="s1">y_Coordinates = </span><span class="s2">0 </span><span class="s0">;</span>
+
+		<span class="s1">FirstCityX = </span><span class="s2">0</span><span class="s0">;</span>
+		<span class="s1">FirstCityY = </span><span class="s2">0</span><span class="s0">;</span>
+
+		<span class="s1">LastCityX = </span><span class="s2">0</span><span class="s0">;</span>
+		<span class="s1">LastCityY = </span><span class="s2">0</span><span class="s0">;</span>
+		<span class="s1">LastDistance = </span><span class="s2">0</span><span class="s0">;</span>
+
+		<span class="s1">LastElementsRemoved = </span><span class="s0">false;</span>
+
+
+		<span class="s0">int </span><span class="s1">RandomIndex2 = RandomCity.nextInt(xR_Coordinates.size())</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Random Index 2 = &quot; </span><span class="s1">+ RandomIndex2)</span><span class="s0">;</span>
+
+		<span class="s1">System.out.println(</span><span class="s4">&quot;The first random city is (second part) : &quot; </span><span class="s1">+ xR_Coordinates.get(RandomIndex2) + </span><span class="s4">&quot;, &quot; </span><span class="s1">+ yR_Coordinates.get(RandomIndex2))</span><span class="s0">;</span>
+
+		<span class="s0">if</span><span class="s1">(NextCityX.isEmpty())</span>
+		<span class="s1">{</span>
+			<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; xR_Coordinates.size()</span><span class="s0">; </span><span class="s1">i++) </span><span class="s3">//Calculate the shortest distance for the first city</span>
+			<span class="s1">{</span>
+				<span class="s0">float </span><span class="s1">CurrentDistance = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((xR_Coordinates.get(RandomIndex2) - xR_Coordinates.get(i)) * (xR_Coordinates.get(RandomIndex2) - xR_Coordinates.get(i))) + Math.abs((yR_Coordinates.get(RandomIndex2) - yR_Coordinates.get(i)) * (yR_Coordinates.get(RandomIndex2) - yR_Coordinates.get(i))))</span><span class="s0">;</span>
+
+				<span class="s0">if</span><span class="s1">(CurrentDistance == </span><span class="s2">0</span><span class="s1">)</span>
+				<span class="s1">{</span>
+					<span class="s1">FirstCityX = xR_Coordinates.get(i)</span><span class="s0">;</span>
+					<span class="s1">FirstCityY = yR_Coordinates.get(i)</span><span class="s0">;</span>
+
+					<span class="s1">xR_Coordinates.remove(i)</span><span class="s0">; </span><span class="s3">//Remove the coordinates from the array after storing it in another variable</span>
+					<span class="s1">yR_Coordinates.remove(i)</span><span class="s0">;</span>
+
+				<span class="s1">}</span>
+				<span class="s0">else</span>
+				<span class="s1">{</span>
+					<span class="s0">if</span><span class="s1">(CurrentDistance &lt;= ShortestDistance &amp;&amp; LastElementsRemoved == </span><span class="s0">false</span><span class="s1">)</span>
+					<span class="s1">{</span>
+						<span class="s1">ShortestDistance = CurrentDistance</span><span class="s0">;</span>
+
+						<span class="s1">System.out.println(</span><span class="s4">&quot;Shortest Distance so far : &quot; </span><span class="s1">+ ShortestDistance + </span><span class="s4">&quot;, at &quot; </span><span class="s1">+ xR_Coordinates.get(i) + </span><span class="s4">&quot;, &quot; </span><span class="s1">+ yR_Coordinates.get(i))</span><span class="s0">;</span>
+
+						<span class="s1">CurrentShortestDistances.push(ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateX.push(xR_Coordinates.get(i))</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateY.push(yR_Coordinates.get(i))</span><span class="s0">;</span>
+					<span class="s1">}</span>
+				<span class="s1">}</span>
+
+
+
+				<span class="s0">if</span><span class="s1">(i == xR_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+				<span class="s1">{</span>
+					<span class="s1">ShortestDistances.add(CurrentShortestDistances.peek())</span><span class="s0">;</span>
+					<span class="s1">NextCityX.add(CurrentShortestCoordinateX.peek())</span><span class="s0">;</span>
+					<span class="s1">NextCityY.add(CurrentShortestCoordinateY.peek())</span><span class="s0">;</span>
+
+					<span class="s1">CurrentShortestDistances.clear()</span><span class="s0">;</span>
+					<span class="s1">CurrentShortestCoordinateX.clear()</span><span class="s0">;</span>
+					<span class="s1">CurrentShortestCoordinateY.clear()</span><span class="s0">;</span>
+
+					<span class="s1">ShortestDistance = </span><span class="s2">1000000000</span><span class="s0">;</span>
+				<span class="s1">}</span>
+			<span class="s1">}</span>
+		<span class="s1">}</span>
+
+
+
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; NextCityX.size()</span><span class="s0">; </span><span class="s1">i++)</span>
+		<span class="s1">{</span>
+			<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">j &lt; xR_Coordinates.size()</span><span class="s0">; </span><span class="s1">j++)</span>
+			<span class="s1">{</span>
+				<span class="s0">float </span><span class="s1">CurrentDistance = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((NextCityX.get(i) - xR_Coordinates.get(j)) * (NextCityX.get(i) - xR_Coordinates.get(j))) + Math.abs((NextCityY.get(i) - yR_Coordinates.get(j)) * (NextCityY.get(i) - yR_Coordinates.get(j))))</span><span class="s0">;</span>
+
+
+				<span class="s1">System.out.println( NextCityX.get(i) + </span><span class="s4">&quot;, &quot; </span><span class="s1">+ NextCityY.get(i) + </span><span class="s4">&quot;   &quot; </span><span class="s1">+ xR_Coordinates.get(j) + </span><span class="s4">&quot;, &quot; </span><span class="s1">+ yR_Coordinates.get(j) + </span><span class="s4">&quot;     &quot; </span><span class="s1">+ CurrentDistance)</span><span class="s0">;</span>
+
+				<span class="s0">if</span><span class="s1">(CurrentDistance == </span><span class="s2">0 </span><span class="s1">&amp;&amp; j &lt; xR_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+				<span class="s1">{</span>
+
+					<span class="s1">xR_Coordinates.remove(j)</span><span class="s0">;</span>
+					<span class="s1">yR_Coordinates.remove(j)</span><span class="s0">;</span>
+				<span class="s1">}</span>
+
+				<span class="s0">else if</span><span class="s1">(CurrentDistance == </span><span class="s2">0 </span><span class="s1">&amp;&amp; j == xR_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+				<span class="s1">{</span>
+
+					<span class="s1">LastElementsRemoved = </span><span class="s0">true;</span>
+
+				<span class="s1">}</span>
+
+				<span class="s0">if</span><span class="s1">(LastElementsRemoved == </span><span class="s0">false</span><span class="s1">)</span>
+				<span class="s1">{</span>
+					<span class="s0">if</span><span class="s1">(CurrentDistance &lt;= ShortestDistance &amp;&amp; CurrentDistance != </span><span class="s2">0 </span><span class="s1">&amp;&amp; CurrentDistance != ShortestDistances.get(ShortestDistances.size() - </span><span class="s2">1</span><span class="s1">))</span>
+					<span class="s1">{</span>
+
+						<span class="s1">ShortestDistance = CurrentDistance</span><span class="s0">;</span>
+						<span class="s1">System.out.println(</span><span class="s4">&quot;Smallest Distance : &quot; </span><span class="s1">+ ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestDistances.push(ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateX.push(xR_Coordinates.get(j))</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateY.push(yR_Coordinates.get(j))</span><span class="s0">;</span>
+					<span class="s1">}</span>
+
+					<span class="s0">if</span><span class="s1">(j == xR_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+					<span class="s1">{</span>
+
+						<span class="s1">ShortestDistances.add(CurrentShortestDistances.peek())</span><span class="s0">;</span>
+						<span class="s1">NextCityX.add(CurrentShortestCoordinateX.peek())</span><span class="s0">;</span>
+						<span class="s1">NextCityY.add(CurrentShortestCoordinateY.peek())</span><span class="s0">;</span>
+
+						<span class="s1">ShortestDistance = </span><span class="s2">1000000000</span><span class="s0">;</span>
+
+					<span class="s1">}</span>
+				<span class="s1">}</span>
+				<span class="s0">else</span>
+				<span class="s1">{</span>
+					<span class="s0">if</span><span class="s1">(CurrentDistance &lt;= ShortestDistance &amp;&amp; CurrentDistance != </span><span class="s2">0 </span><span class="s1">&amp;&amp; CurrentDistance != ShortestDistances.get(ShortestDistances.size() - </span><span class="s2">1</span><span class="s1">) &amp;&amp; j != xR_Coordinates.get(xR_Coordinates.size() - </span><span class="s2">1</span><span class="s1">))</span>
+					<span class="s1">{</span>
+						<span class="s1">ShortestDistance = CurrentDistance</span><span class="s0">;</span>
+						<span class="s1">System.out.println(</span><span class="s4">&quot;Smallest Distance : &quot; </span><span class="s1">+ ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestDistances.push(ShortestDistance)</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateX.push(xR_Coordinates.get(j))</span><span class="s0">;</span>
+						<span class="s1">CurrentShortestCoordinateY.push(yR_Coordinates.get(j))</span><span class="s0">;</span>
+					<span class="s1">}</span>
+					<span class="s0">if</span><span class="s1">(j == xR_Coordinates.size() - </span><span class="s2">1</span><span class="s1">)</span>
+					<span class="s1">{</span>
+
+						<span class="s1">ShortestDistances.add(CurrentShortestDistances.peek())</span><span class="s0">;</span>
+						<span class="s1">NextCityX.add(CurrentShortestCoordinateX.peek())</span><span class="s0">;</span>
+						<span class="s1">NextCityY.add(CurrentShortestCoordinateY.peek())</span><span class="s0">;</span>
+
+						<span class="s1">ShortestDistance = </span><span class="s2">1000000000</span><span class="s0">;</span>
+					<span class="s1">}</span>
+				<span class="s1">}</span>
+
+
+			<span class="s1">}</span>
+
+			<span class="s0">if</span><span class="s1">(xR_Coordinates.size() == </span><span class="s2">2 </span><span class="s1">&amp;&amp; yR_Coordinates.size() == </span><span class="s2">2</span><span class="s1">)</span>
+			<span class="s1">{</span>
+				<span class="s1">LastCityX = xR_Coordinates.get(</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+				<span class="s1">LastCityY = yR_Coordinates.get(</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+
+				<span class="s1">LastDistance = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((LastCityX - FirstCityX) * (LastCityX - FirstCityX)) + Math.abs((LastCityY - FirstCityY) * (LastCityY - FirstCityY)))</span><span class="s0">;</span>
+
+
+
+				<span class="s0">break;</span>
+			<span class="s1">}</span>
+
+		<span class="s1">}</span>
+
+		<span class="s1">TotalDistance2 = TotalDistanceCalculator() + LastDistance</span><span class="s0">;</span>
+
+
+		<span class="s1">System.out.println(</span><span class="s4">&quot;&quot;</span><span class="s1">)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;_______________RESULTS______________&quot;</span><span class="s1">)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Remaining X and Y Coordinates = &quot; </span><span class="s1">+ xR_Coordinates.size())</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Shortest distances : &quot; </span><span class="s1">+ ShortestDistances)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Remaining X Coordinates : &quot; </span><span class="s1">+ xR_Coordinates)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Remaining Y Coordinates : &quot; </span><span class="s1">+ yR_Coordinates)</span><span class="s0">;</span>
+
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Next City X : &quot; </span><span class="s1">+ NextCityX)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Next City Y : &quot; </span><span class="s1">+ NextCityY)</span><span class="s0">;</span>
+
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Final Distance : &quot; </span><span class="s1">+ LastDistance)</span><span class="s0">;</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Total Distance : &quot; </span><span class="s1">+ TotalDistance2)</span><span class="s0">;</span>
+
+
+		<span class="s1">R1 = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((xL_Coordinates.get(</span><span class="s2">0</span><span class="s1">)-xL_Coordinates.get(</span><span class="s2">1</span><span class="s1">))*(xL_Coordinates.get(</span><span class="s2">0</span><span class="s1">)-xL_Coordinates.get(</span><span class="s2">1</span><span class="s1">)+(yL_Coordinates.get(</span><span class="s2">0</span><span class="s1">)-yL_Coordinates.get(</span><span class="s2">1</span><span class="s1">))*(yL_Coordinates.get(</span><span class="s2">0</span><span class="s1">)-yL_Coordinates.get(</span><span class="s2">1</span><span class="s1">)))))</span><span class="s0">;</span>
+		<span class="s3">// Distance of left remaining cities</span>
+		<span class="s1">R2 = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((xR_Coordinates.get(</span><span class="s2">0</span><span class="s1">)-xR_Coordinates.get(</span><span class="s2">1</span><span class="s1">))*(xR_Coordinates.get(</span><span class="s2">0</span><span class="s1">)-xR_Coordinates.get(</span><span class="s2">1</span><span class="s1">)+(yR_Coordinates.get(</span><span class="s2">0</span><span class="s1">)-yR_Coordinates.get(</span><span class="s2">1</span><span class="s1">))*(yR_Coordinates.get(</span><span class="s2">0</span><span class="s1">)-yR_Coordinates.get(</span><span class="s2">1</span><span class="s1">)))))</span><span class="s0">;</span>
+		<span class="s3">// Distance of right remaining cities</span>
+		<span class="s1">R3 = (</span><span class="s0">float</span><span class="s1">) Math.sqrt(Math.abs((xL_Coordinates.get(</span><span class="s2">1</span><span class="s1">)-xR_Coordinates.get(</span><span class="s2">1</span><span class="s1">))*(xL_Coordinates.get(</span><span class="s2">1</span><span class="s1">)-xR_Coordinates.get(</span><span class="s2">1</span><span class="s1">)+(yL_Coordinates.get(</span><span class="s2">1</span><span class="s1">)-yR_Coordinates.get(</span><span class="s2">1</span><span class="s1">))*(yL_Coordinates.get(</span><span class="s2">1</span><span class="s1">)-yR_Coordinates.get(</span><span class="s2">1</span><span class="s1">)))))</span><span class="s0">;</span>
+		<span class="s3">// Combine of two areas</span>
+		<span class="s1">LastTotalDistance = R1 + R2 + R3 + TotalDistance2 + TotalDistance1 </span><span class="s0">;</span>
+		<span class="s3">//System.out.println(&quot;R1 &quot; + R1 + &quot; R2 &quot;+ R2+ &quot; R3 &quot; + R3);</span>
+		<span class="s1">System.out.println(</span><span class="s4">&quot;Total Distance : &quot;</span><span class="s1">+ LastTotalDistance)</span><span class="s0">;</span>
+	<span class="s3">/* 
+        for(int i= 0 ; i&lt;xR_Coordinates.size();i++) { 
+            xRemaningCoordinates.add(xR_Coordinates.get(i)); 
+        } 
+            for (int j=0;j&lt;xR_Coordinates.size();j++){ 
+                xRemaningCoordinates.add(xL_Coordinates.get(j)); 
+ 
+        } 
+        for(int i= 0 ; i&lt;xR_Coordinates.size();i++) { 
+            yRemaningCoordinates.add(yR_Coordinates.get(i)); 
+        } 
+        for (int j=0;j&lt;yR_Coordinates.size();j++){ 
+            yRemaningCoordinates.add(yL_Coordinates.get(j)); 
+        } 
+        System.out.println(xRemaningCoordinates + &quot; &quot;+ yRemaningCoordinates); 
+        */</span>
+
+
+
+	<span class="s1">}</span>
+
+
+	<span class="s0">public static float </span><span class="s1">TotalDistanceCalculator()</span>
+	<span class="s1">{</span>
+		<span class="s0">float </span><span class="s1">SemiTotalDistance = </span><span class="s2">0</span><span class="s0">; </span>
+		<span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; ShortestDistances.size()</span><span class="s0">; </span><span class="s1">i++)</span>
+		<span class="s1">{</span>
+			<span class="s1">SemiTotalDistance = SemiTotalDistance + ShortestDistances.get(i)</span><span class="s0">;</span>
+		<span class="s1">}</span>
+		
+		
+		
+		<span class="s0">return </span><span class="s1">SemiTotalDistance</span><span class="s0">;</span>
+	<span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>
