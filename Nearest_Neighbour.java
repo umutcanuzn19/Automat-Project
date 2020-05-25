@@ -43,6 +43,8 @@ public class Nearest_Neighbour extends Canvas {
 	public static float LastElementX = 0; 
 	public static float LastElementY = 0; 
 	public static boolean LastElementsRemoved = false;
+	public static float temp = 0 ;
+	public static float temp2 = 0 ;
 
 	
 	//float CurrentDistance = (float) Math.sqrt(Math.abs((X_Coordinates.get(j) - X_Coordinates.get(i)) * (X_Coordinates.get(j) - X_Coordinates.get(i))) + Math.abs((Y_Coordinates.get(j) - Y_Coordinates.get(i)) * (Y_Coordinates.get(j) - Y_Coordinates.get(i))));
@@ -294,7 +296,7 @@ public class Nearest_Neighbour extends Canvas {
 		System.out.println("Next City Y : " + NextCityY);
 
 		System.out.println("Final Distance : " + LastDistance);
-		System.out.println("Total Distance : " + TotalDistance1);
+		System.out.println("Total Distance half1 : " + TotalDistance1);
 
 ///////////////////////
 
@@ -465,9 +467,20 @@ public class Nearest_Neighbour extends Canvas {
 
 		}
 
+		for(int i=0 ;i<xR_Coordinates.size();i++){
+			for (int j = 0 ;i<xR_Coordinates.size();i++){
+				temp = (float) Math.sqrt(Math.abs((xR_Coordinates.get(i) - xL_Coordinates.get(j)) * (xR_Coordinates.get(i) - xL_Coordinates.get(j))) + Math.abs((yR_Coordinates.get(i) - yL_Coordinates.get(j)) * (yR_Coordinates.get(i) - yL_Coordinates.get(j))));
+				if(temp2==0){
+					temp2 = temp ;
+				}else if(temp<temp2){
+					temp2 = temp ;
+				}
+			}
+		}
+		LastDistance = temp2 ;
 		TotalDistance2 = TotalDistanceCalculator() + LastDistance;
 
-
+		LastTotalDistance = TotalDistance1 + TotalDistance2 ;
 		System.out.println("");
 		System.out.println("_______________RESULTS______________");
 		System.out.println("Remaining X and Y Coordinates = " + xR_Coordinates.size());
@@ -479,9 +492,9 @@ public class Nearest_Neighbour extends Canvas {
 		System.out.println("Next City Y : " + NextCityY);
 
 		System.out.println("Final Distance : " + LastDistance);
-		System.out.println("Total Distance : " + TotalDistance2);
-
-
+		System.out.println("Total Distance half 2: " + TotalDistance2);
+		System.out.println("Total Distance of halves together : "+LastTotalDistance);
+	/*
 		R1 = (float) Math.sqrt(Math.abs((xL_Coordinates.get(0)-xL_Coordinates.get(1))*(xL_Coordinates.get(0)-xL_Coordinates.get(1)+(yL_Coordinates.get(0)-yL_Coordinates.get(1))*(yL_Coordinates.get(0)-yL_Coordinates.get(1)))));
 		// Distance of left remaining cities
 		R2 = (float) Math.sqrt(Math.abs((xR_Coordinates.get(0)-xR_Coordinates.get(1))*(xR_Coordinates.get(0)-xR_Coordinates.get(1)+(yR_Coordinates.get(0)-yR_Coordinates.get(1))*(yR_Coordinates.get(0)-yR_Coordinates.get(1)))));
@@ -491,7 +504,11 @@ public class Nearest_Neighbour extends Canvas {
 		LastTotalDistance = R1 + R2 + R3 + TotalDistance2 + TotalDistance1 ;
 		//System.out.println("R1 " + R1 + " R2 "+ R2+ " R3 " + R3);
 		System.out.println("Total Distance : "+ LastTotalDistance);
+
+	*/
 	/*
+	 */
+		/*
 		for(int i= 0 ; i<xR_Coordinates.size();i++) {
 			xRemaningCoordinates.add(xR_Coordinates.get(i));
 		}
